@@ -2,12 +2,12 @@
   "name": "bot-twitter-discord",
   "version": "1.0.0",
   "description": "",
-  "main": "index.ts",
+  "main": "main.ts",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "start": "ts-node src/index.ts",
-    "dev": "ts-node-dev -r tsconfig-paths/register --inspect --transpile-only --ignore-watch node_modules src/index.ts",
-    "prod": "node dist/index",
+    "start": "ts-node src/main.ts",
+    "dev": "ts-node-dev -r tsconfig-paths/register --inspect --transpile-only --ignore-watch node_modules src/main.ts",
+    "prod": "node dist/main",
     "lint": "eslint . --ext .ts",
     "lint-fix": "eslint . --ext .ts --fix"
   },

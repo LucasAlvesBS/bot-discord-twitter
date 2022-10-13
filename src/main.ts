@@ -1,6 +1,6 @@
-import { credentials } from '@config/credentials';
-import { checkDiscordToken } from '@helpers/functions/discord-token.function';
-import { watchHavaianasTimeline } from '@twitter/perfils/havaianas.perfil';
+import { credentials } from './config/credentials';
+import { checkDiscordToken } from './helpers/functions/discord-token.function';
+import { watchHavaianasTimeline } from './twitter/perfils/havaianas.perfil';
 import { Client, GatewayIntentBits, Partials } from 'discord.js';
 
 const client = new Client({

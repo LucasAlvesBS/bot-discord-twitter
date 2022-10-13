@@ -1,4 +1,4 @@
-import { credentials } from '@config/credentials';
+import { credentials } from '../../config/credentials';
 
 export const checkDiscordToken = () => {
   if (!credentials.discordToken) {

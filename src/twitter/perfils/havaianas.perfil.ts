@@ -1,10 +1,8 @@
-import { credentials } from '@config/credentials';
-import { Client, TextChannel } from 'discord.js';
-import {
-  ETwitterStreamEvent,
-  TweetV2SingleStreamResult,
-  TwitterApi,
-} from 'twitter-api-v2';
+import { credentials } from '../../config/credentials';
+import { sendFromHavaianasToDiscord } from '../../discord/send-havaianas';
+import { checkStreamRules } from '../../helpers/functions/stream-rules.function';
+import { Client } from 'discord.js';
+import { ETwitterStreamEvent, TwitterApi } from 'twitter-api-v2';
 
 const twitter = new TwitterApi(credentials.bearerToken);
 
@@ -13,7 +11,7 @@ const twitterV2 = roTwitter.v2;
 
 export const watchHavaianasTimeline = async (client: Client) => {
   try {
-    console.log('Setting up Twitter...');
+    console.log('Watching twitter in real time...');
     const rules = await twitterV2.streamRules();
     if (rules.data?.length) {
       await twitterV2.updateStreamRules({
@@ -24,11 +22,13 @@ export const watchHavaianasTimeline = async (client: Client) => {
     await twitterV2.updateStreamRules({
       add: [
         {
-          value: `from: ${credentials.username} #${credentials.profileHashtag}`,
+          value: `from: ${credentials.userId} #${credentials.profileHashtag}`,
           tag: 'havaianas',
         },
       ],
     });
+
+    checkStreamRules();
 
     const stream = await twitterV2.searchStream({
       'tweet.fields': ['referenced_tweets', 'author_id'],
@@ -52,29 +52,10 @@ export const watchHavaianasTimeline = async (client: Client) => {
         return;
       }
 
-      sendMessage(tweet, client);
+      sendFromHavaianasToDiscord(tweet, client);
     });
-
-    const sendMessage = async (
-      tweet: TweetV2SingleStreamResult,
-      client: Client,
-    ) => {
-      const url =
-        'https://twitter.com/' +
-        tweet.includes?.users?.map(user => user.username) +
-        '/status/' +
-        tweet.data.id;
-      try {
-        const channel = client.channels.cache.get(
-          credentials.discordChannelId,
-        ) as TextChannel;
-        await channel.send(url);
-      } catch (error) {
-        console.error(error);
-      }
-    };
   } catch (error) {
-    console.warn('Stream disconnected with error 429. Retrying.');
+    console.warn('Stream disconnected with error. Retrying.', error);
     watchHavaianasTimeline(client);
   }
 };

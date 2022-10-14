@@ -4,8 +4,12 @@ dotenv.config();
 
 export const credentials = {
   discordToken: process.env.DISCORD_TOKEN,
-  discordChannelId: process.env.DISCORD_CHANNEL_ID || '',
+  discordHavaianasProfileChannelId:
+    process.env.DISCORD_HAVAIANAS_PROFILE_CHANNEL_ID || '',
+  discordCommunityHashtagChannelId:
+    process.env.DISCORD_COMMUNITY_HASHTAG_CHANNEL_ID || '',
   bearerToken: process.env.TWITTER_BEARER_TOKEN || '',
-  userId: process.env.TWITTER_USER_ID,
-  profileHashtag: process.env.TWITTER_PROFILE_HASHTAG,
+  havaianasProfileId: process.env.TWITTER_HAVAIANAS_PROFILE_ID,
+  havaianasProfileHashtag: process.env.TWITTER_HAVAIANAS_PROFILE_HASHTAG,
+  communityHashtag: process.env.TWITTER_COMMUNITY_HASHTAG,
 };

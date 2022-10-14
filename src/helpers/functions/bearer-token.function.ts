@@ -1,7 +1,7 @@
 import { credentials } from '@config/credentials';
 
-export const checkDiscordToken = () => {
-  if (!credentials.discordToken) {
+export const checkBearerToken = () => {
+  if (credentials.bearerToken === '') {
     throw new Error('Token invalid');
   }
 };

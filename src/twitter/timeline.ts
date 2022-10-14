@@ -1,13 +1,9 @@
-import { credentials } from '../../config/credentials';
-import { sendFromHavaianasToDiscord } from '../../discord/send-havaianas';
-import { checkStreamRules } from '../../helpers/functions/stream-rules.function';
+import { credentials } from '@config/credentials';
+import { sendFromHavaianasToDiscord } from '@discord/channels/tweet.channel';
+import { checkRulesForHavaianasProfile } from '@helpers/functions/rules-havaianas.function';
 import { Client } from 'discord.js';
-import { ETwitterStreamEvent, TwitterApi } from 'twitter-api-v2';
-
-const twitter = new TwitterApi(credentials.bearerToken);
-
-const roTwitter = twitter.readOnly;
-const twitterV2 = roTwitter.v2;
+import { ETwitterStreamEvent } from 'twitter-api-v2';
+import { twitterV2 } from './twitter-api';
 
 export const watchHavaianasTimeline = async (client: Client) => {
   try {
@@ -22,13 +18,17 @@ export const watchHavaianasTimeline = async (client: Client) => {
     await twitterV2.updateStreamRules({
       add: [
         {
-          value: `from: ${credentials.userId} #${credentials.profileHashtag}`,
+          value: `from: ${credentials.havaianasProfileId} #${credentials.havaianasProfileHashtag}`,
           tag: 'havaianas',
+        },
+        {
+          value: `#${credentials.communityHashtag}`,
+          tag: 'community',
         },
       ],
     });
 
-    checkStreamRules();
+    checkRulesForHavaianasProfile();
 
     const stream = await twitterV2.searchStream({
       'tweet.fields': ['referenced_tweets', 'author_id'],

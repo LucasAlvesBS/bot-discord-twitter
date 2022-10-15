@@ -31,7 +31,7 @@ export const watchHavaianasTimeline = async (client: Client) => {
     checkRulesForHavaianasProfile();
 
     const stream = await twitterV2.searchStream({
-      'tweet.fields': ['referenced_tweets', 'author_id'],
+      'tweet.fields': ['referenced_tweets', 'author_id', 'possibly_sensitive'],
       expansions: ['referenced_tweets.id', 'entities.mentions.username'],
     });
 
@@ -39,6 +39,10 @@ export const watchHavaianasTimeline = async (client: Client) => {
 
     stream.on(ETwitterStreamEvent.Data, async tweet => {
       console.log(tweet);
+
+      if (tweet.data.possibly_sensitive === true) {
+        return;
+      }
 
       const isRtOrReplyOrQuote =
         tweet.data.referenced_tweets?.some(

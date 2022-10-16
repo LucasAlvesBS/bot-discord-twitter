@@ -1,1 +1,1 @@
-export const forbiddenUrl = ['pornhub', 'xvideos', 'redtube', 'xnxx', 'github'];
+export const forbiddenUrl = ['pornhub', 'xvideos', 'redtube', 'xnxx'];

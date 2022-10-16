@@ -1,11 +1,12 @@
 import { credentials } from '@config/credentials';
-import { sendFromHavaianasToDiscord } from '@discord/channels/tweet.channel';
+import { sendTweetsToDiscord } from '@discord/shipping';
 import { checkRulesForHavaianasProfile } from '@helpers/functions/rules-havaianas.function';
+import { errorMessage } from '@helpers/messages/error.message';
 import { Client } from 'discord.js';
 import { ETwitterStreamEvent } from 'twitter-api-v2';
 import { twitterV2 } from './twitter-api';
 
-export const watchHavaianasTimeline = async (client: Client) => {
+export const watchTwitterTimeline = async (client: Client) => {
   try {
     console.log('Watching twitter in real time...');
     const rules = await twitterV2.streamRules();
@@ -19,11 +20,11 @@ export const watchHavaianasTimeline = async (client: Client) => {
       add: [
         {
           value: `from: ${credentials.havaianasProfileId} #${credentials.havaianasProfileHashtag}`,
-          tag: 'havaianas',
+          tag: credentials.havaianasTag,
         },
         {
           value: `#${credentials.communityHashtag}`,
-          tag: 'community',
+          tag: credentials.communityTag,
         },
       ],
     });
@@ -36,6 +37,7 @@ export const watchHavaianasTimeline = async (client: Client) => {
     });
 
     stream.autoReconnect = true;
+    stream.autoReconnectRetries = Infinity;
 
     stream.on(ETwitterStreamEvent.Data, async tweet => {
       console.log(tweet);
@@ -56,10 +58,10 @@ export const watchHavaianasTimeline = async (client: Client) => {
         return;
       }
 
-      sendFromHavaianasToDiscord(tweet, client);
+      sendTweetsToDiscord(tweet, client);
     });
   } catch (error) {
-    console.warn('Stream disconnected with error. Retrying.', error);
-    watchHavaianasTimeline(client);
+    console.warn(errorMessage.STREAM_DISCONNECT, error);
+    watchTwitterTimeline(client);
   }
 };

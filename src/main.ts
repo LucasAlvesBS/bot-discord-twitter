@@ -1,6 +1,6 @@
 import { credentials } from '@config/credentials';
 import { checkDiscordToken } from '@helpers/functions/discord-token.function';
-import { watchHavaianasTimeline } from '@twitter/timeline';
+import { watchTwitterTimeline } from '@twitter/timeline';
 import { Client, GatewayIntentBits, Partials } from 'discord.js';
 
 const client = new Client({
@@ -14,5 +14,5 @@ client.login(credentials.discordToken);
 
 client.on('ready', () => {
   console.log('Discord ready to start');
-  watchHavaianasTimeline(client);
+  watchTwitterTimeline(client);
 });

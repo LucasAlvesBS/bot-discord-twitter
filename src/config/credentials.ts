@@ -12,4 +12,6 @@ export const credentials = {
   havaianasProfileId: process.env.TWITTER_HAVAIANAS_PROFILE_ID,
   havaianasProfileHashtag: process.env.TWITTER_HAVAIANAS_PROFILE_HASHTAG,
   communityHashtag: process.env.TWITTER_COMMUNITY_HASHTAG,
+  havaianasTag: process.env.TWITTER_HAVAIANAS_TAG,
+  communityTag: process.env.TWITTER_COMMUNITY_TAG,
 };

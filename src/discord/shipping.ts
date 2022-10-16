@@ -1,8 +1,9 @@
 import { credentials } from '@config/credentials';
+import { errorMessage } from '@helpers/messages/error.message';
 import { Client, TextChannel } from 'discord.js';
 import { TweetV2SingleStreamResult } from 'twitter-api-v2';
 
-export const sendFromHavaianasToDiscord = async (
+export const sendTweetsToDiscord = async (
   tweet: TweetV2SingleStreamResult,
   client: Client,
 ) => {
@@ -11,8 +12,8 @@ export const sendFromHavaianasToDiscord = async (
 
   try {
     const tag = tweet.matching_rules.map(rule => rule.tag);
-    const havaianasTag = tag.some(tag => tag === 'havaianas');
-    const communityTag = tag.some(tag => tag === 'community');
+    const havaianasTag = tag.some(tag => tag === credentials.havaianasTag);
+    const communityTag = tag.some(tag => tag === credentials.communityTag);
 
     if (havaianasTag) {
       const channel = client.channels.cache.get(
@@ -28,6 +29,6 @@ export const sendFromHavaianasToDiscord = async (
       await channel.send(url);
     }
   } catch (error) {
-    throw new Error('The channel id is required');
+    throw new Error(errorMessage.CHANNEL_REQUIRED);
   }
 };

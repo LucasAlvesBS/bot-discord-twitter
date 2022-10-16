@@ -1,4 +1,5 @@
 import { credentials } from '@config/credentials';
+import { errorMessage } from '@helpers/messages/error.message';
 
 export const checkRulesForHavaianasProfile = () => {
   if (
@@ -6,6 +7,6 @@ export const checkRulesForHavaianasProfile = () => {
     !credentials.havaianasProfileHashtag ||
     !credentials.communityHashtag
   ) {
-    throw new Error('The profile id and the hashtag are required');
+    throw new Error(errorMessage.ID_HASHTAG_REQUIRED);
   }
 };

@@ -1,5 +1,6 @@
 import { credentials } from '@config/credentials';
 import { sendTweetsToDiscord } from '@discord/shipping';
+import { filterUrl } from '@helpers/functions/filter-url.function';
 import { checkRulesForHavaianasProfile } from '@helpers/functions/rules-havaianas.function';
 import { errorMessage } from '@helpers/messages/error.message';
 import { Client } from 'discord.js';
@@ -32,7 +33,12 @@ export const watchTwitterTimeline = async (client: Client) => {
     checkRulesForHavaianasProfile();
 
     const stream = await twitterV2.searchStream({
-      'tweet.fields': ['referenced_tweets', 'author_id', 'possibly_sensitive'],
+      'tweet.fields': [
+        'referenced_tweets',
+        'author_id',
+        'possibly_sensitive',
+        'entities',
+      ],
       expansions: ['referenced_tweets.id', 'entities.mentions.username'],
     });
 
@@ -41,6 +47,12 @@ export const watchTwitterTimeline = async (client: Client) => {
 
     stream.on(ETwitterStreamEvent.Data, async tweet => {
       console.log(tweet);
+
+      const urlFiltered = filterUrl(tweet);
+
+      if (urlFiltered !== null && urlFiltered !== undefined) {
+        return;
+      }
 
       if (tweet.data.possibly_sensitive === true) {
         return;

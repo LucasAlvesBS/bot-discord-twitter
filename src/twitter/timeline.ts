@@ -1,5 +1,5 @@
 import { credentials } from '@config/credentials';
-import { sendTweetsToDiscord } from '@discord/shipping';
+import { sendTweetsToDiscord } from '@discord/send-tweets';
 import { filterUrl } from '@helpers/functions/filter-url.function';
 import { checkRulesForHavaianasProfile } from '@helpers/functions/rules-havaianas.function';
 import { errorMessage } from '@helpers/messages/error.message';

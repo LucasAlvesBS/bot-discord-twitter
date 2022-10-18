@@ -61,6 +61,18 @@ Na raiz do projeto, consta um arquivo ".env.example", que exibe todas as variáv
 
 Para obter o ID de um perfil no twitter, acesse [Twitter-ID](https://commentpicker.com/twitter-id.php).
 
+# Regras de Negócio
+
+O bot deve ser capaz de assistir a timeline do twitter para pegar os tweets relacionados às regras abaixo.
+
+1. Todos os tweets do perfil da Havaianas, tendo como filtro uma hashtag específica.
+
+2. Todos os tweets de uma determinada hashtag para que a comunidade possa interagir.
+
+3. Os tweets precisam passar por um filtro de conteúdo potencialmente sensível.
+
+4. Retweets, respostas e citações de retweets não são permitidos.
+
 # Links
 
 - [Docker](https://docs.docker.com/)

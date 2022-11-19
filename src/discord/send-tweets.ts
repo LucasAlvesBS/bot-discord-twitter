@@ -1,4 +1,3 @@
-import { credentials } from '@config/credentials';
 import { errorMessage } from '@helpers/messages/error.message';
 import { Client, TextChannel } from 'discord.js';
 import { TweetV2SingleStreamResult } from 'twitter-api-v2';
@@ -12,18 +11,18 @@ export const sendTweetsToDiscord = async (
 
   try {
     const tag = tweet.matching_rules.map(rule => rule.tag);
-    const havaianasTag = tag.some(tag => tag === credentials.havaianasTag);
-    const communityTag = tag.some(tag => tag === credentials.communityTag);
+    const havaianasTag = tag.some(tag => tag === 'havaianas');
+    const communityTag = tag.some(tag => tag === 'community');
 
     if (havaianasTag) {
       const channel = client.channels.cache.get(
-        credentials.discordHavaianasProfileChannelId,
+        '1029471355080540202',
       ) as TextChannel;
 
       await channel.send(url);
     } else if (communityTag) {
       const channel = client.channels.cache.get(
-        credentials.discordCommunityHashtagChannelId,
+        '1030209132478869554',
       ) as TextChannel;
 
       await channel.send(url);

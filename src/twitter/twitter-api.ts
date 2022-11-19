@@ -2,7 +2,7 @@ import { credentials } from '@config/credentials';
 import { checkBearerToken } from '@helpers/functions/bearer-token.function';
 import { TwitterApi } from 'twitter-api-v2';
 
-const twitter = new TwitterApi(credentials.bearerToken);
+const twitter = new TwitterApi(credentials.twitterBearerToken);
 
 checkBearerToken();
 

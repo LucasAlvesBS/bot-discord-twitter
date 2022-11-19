@@ -1,10 +1,9 @@
-import { credentials } from '@config/credentials';
 import { sendTweetsToDiscord } from '@discord/send-tweets';
 import { filterUrl } from '@helpers/functions/filter-url.function';
-import { checkRulesForHavaianasProfile } from '@helpers/functions/rules-havaianas.function';
+import { sleep } from '@helpers/functions/sleep.function';
 import { errorMessage } from '@helpers/messages/error.message';
 import { Client } from 'discord.js';
-import { ETwitterStreamEvent } from 'twitter-api-v2';
+import { ApiResponseError, ETwitterStreamEvent } from 'twitter-api-v2';
 import { twitterV2 } from './twitter-api';
 
 export const watchTwitterTimeline = async (client: Client) => {
@@ -20,17 +19,15 @@ export const watchTwitterTimeline = async (client: Client) => {
     await twitterV2.updateStreamRules({
       add: [
         {
-          value: `from: ${credentials.havaianasProfileId} #${credentials.havaianasProfileHashtag}`,
-          tag: credentials.havaianasTag,
+          value: 'from: 1578032491704614914 #nfttestediamante',
+          tag: 'havaianas',
         },
         {
-          value: `#${credentials.communityHashtag}`,
-          tag: credentials.communityTag,
+          value: '#nfttestandobem',
+          tag: 'community',
         },
       ],
     });
-
-    checkRulesForHavaianasProfile();
 
     const stream = await twitterV2.searchStream({
       'tweet.fields': [
@@ -73,7 +70,19 @@ export const watchTwitterTimeline = async (client: Client) => {
       sendTweetsToDiscord(tweet, client);
     });
   } catch (error) {
-    console.warn(errorMessage.STREAM_DISCONNECT, error);
-    watchTwitterTimeline(client);
+    if (
+      error instanceof ApiResponseError &&
+      error.rateLimitError &&
+      error.rateLimit
+    ) {
+      const resetTimeout = error.rateLimit.reset * 1000;
+      const timeToWait = resetTimeout - Date.now();
+
+      await sleep(timeToWait);
+      watchTwitterTimeline(client);
+    } else {
+      console.warn(errorMessage.STREAM_DISCONNECT, error);
+      watchTwitterTimeline(client);
+    }
   }
 };
